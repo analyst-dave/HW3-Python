@@ -10,7 +10,7 @@ with open(csvpath) as csvfile:
 
     # Read the header row first (skip this step if there is now header)
     csv_header = next(csvreader)
-    print(f"CSV Header: {csv_header}")
+    #print(f"CSV Header: {csv_header}")
 
     line_count = 0
     running_total = 0
@@ -25,8 +25,6 @@ with open(csvpath) as csvfile:
     # Read each row of data after the header
     for row in csvreader:
     
-        # print(f'\t Date = {row[0]}, Profit/Losses = {row[1]}, delta = {int(row[1]) - previous_row}')
-            
         delta = int(row[1]) - previous_row
         if previous_row != 0:
             delta_sum += delta
@@ -46,10 +44,14 @@ with open(csvpath) as csvfile:
 
     print(f'Total Months: {line_count}')
     print(f'Running Total: ${running_total}')
-
-    print(f'Delta sum: ${delta_sum}')
-    print(f'Average  Change: ${(delta_sum)/line_count}')
-
+    print(f'Average  Change: ${(delta_sum)/(line_count-1)}')
     print(f'Greatest Increase in Profits: {best_month} (${greatest_gain})')
     print(f'Greatest Decrease in Profits: {worst_month} (${greatest_loss})')
-        
+
+    fh = open("PyBankOutput.txt", "w")
+    fh.write(f'Total Months: {line_count}\n')
+    fh.write(f'Running Total: ${running_total}\n')
+    fh.write(f'Average  Change: ${(delta_sum)/(line_count-1)}\n')
+    fh.write(f'Greatest Increase in Profits: {best_month} (${greatest_gain})\n')
+    fh.write(f'Greatest Decrease in Profits: {worst_month} (${greatest_loss})\n')
+    fh.close()    
